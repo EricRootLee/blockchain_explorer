@@ -1,0 +1,7 @@
+<h1>Block info</h1>
+<div class="section">
+ <table>
+    <tr><th>Total transacted</th><th>Total Fees</th><th>Block Size</th></tr>
+    <tr><td><%= @block.total_sent %></td><td><%= @block.total_fee %></td><td><%= @block.block_size %></td></tr>
+</table>
+</div>
