@@ -1,8 +1,2 @@
-<h1>Listing Blocks</h1>
-<table>
-<%= for block <- @blocks do %>
-<tr>
-<td><td><%= link block.height, to: Routes.block_path(@conn, :show, block.hash) %></td></td><td><%= block.transactions%></td><td><%= block.total_sent%></td><td><%= block.total_fee%></td><td><%= block.block_size%></td>
-</tr>
-<% end %> 
-</table>
+<%= render "blocks.html", blocks: @blocks, conn: @conn %>
+<%= render RpcExplorerWeb.TransactionView, "transactions.html", transactions: @transactions, conn: @conn %>

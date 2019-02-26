@@ -14,6 +14,8 @@ config :rpc_explorer, RpcExplorerWeb.Endpoint,
   render_errors: [view: RpcExplorerWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: RpcExplorer.PubSub, adapter: Phoenix.PubSub.PG2]
 
+config :bitcoin_url, :url, "http://USER:PASSWORD@NODEIP:PORT"
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

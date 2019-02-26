@@ -1,7 +1,27 @@
 <h1>Block info</h1>
 <div class="section">
+<table>
+<tr>
+    <td><%= link "<- Previous Block", to: Routes.block_path(@conn, :show, Map.get(@block, "previousblockhash")) %></td>
+    <%= if Map.get(@block, "nextblockhash") != nil do %>
+    <td><%= link "Next Block ->", to: Routes.block_path(@conn, :show, Map.get(@block, "nextblockhash")) %></td>
+    <% end %>
+</tr>
+</table>    
+</div>
+<div class="section">
  <table>
-    <tr><th>Total transacted</th><th>Total Fees</th><th>Block Size</th></tr>
-    <tr><td><%= @block.total_sent %></td><td><%= @block.total_fee %></td><td><%= @block.block_size %></td></tr>
+    <tr><th>Received</th><th>Total transacted</th><th>Total Fees</th></tr>
+    <tr><td><%= Map.get(@block, "time") %></td><td><%=  %></td><td></td></tr>
 </table>
 </div>
+
+<div class="section">
+ <table>
+    <tr><td>Block Size (bytes):</td><td><%= Map.get(@block, "strippedsize") %></td></tr>
+    <tr><td>Nonce:</td><td><%= Map.get(@block, "nonce") %></td></tr>
+    <tr><td>Merkle Root:</td><td><%= Map.get(@block, "merkleroot") %></td></tr>
+    <tr><td>Version:</td><td><%= Map.get(@block, "version") %></td></tr>
+</table>
+</div>
+<%= render "transaction_details.html", transactions: @transactions, conn: @conn %>

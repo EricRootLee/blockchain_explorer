@@ -1,0 +1,22 @@
+<%= for transaction <- @transactions do %>
+<%# <%= if Map.get(transaction, "vin") |>  Enum.at(0) |> Map.get("coinbase") == nil do %>
+<h1>Inputs</h1>
+<table>
+<%= for txin <- Map.get(transaction, "vin") do %>
+<tr>
+<td>txid:</td><td><%= Map.get(txin, "txid") %></td>
+</tr>
+<% end %>
+</table>
+
+<h1>Outputs</h1>
+<table>
+<%= for txout <- Map.get(transaction, "vout") do %>
+<tr>
+<td>Address:</td><td><%= Map.get(Map.get(txout, "scriptPubKey"), "addresses") %></td>
+<td>value:</td><td><%= Map.get(txout, "value") %></td>
+</tr>
+<% end %>
+</table>
+<%# <% end %> 
+<% end %>

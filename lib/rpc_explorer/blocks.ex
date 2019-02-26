@@ -2,24 +2,76 @@ defmodule RpcExplorer.Blocks do
   @moduledoc """
   The Blocks context.
   """
-  alias RpcExplorer.Blocks.Block
 
   def list_blocks do
-    [
-      %Block{hash: "d51145cc22c104aabd8dca0369f704ad6cc7fd116ba505d7847ac6cf130d5bbb", height: 1584288, transactions: 37, total_sent: 2352.23, total_fee: 0.006, block_size: 7140},
-      %Block{hash: "d51145cc22c104aabd8dca0369f704ad6cc7fd116ba505d7847ac6cf130d5bbc", height: 1584287, transactions: 1, total_sent: 0, total_fee: 0, block_size: 232},
-      %Block{hash: "d51145cc22c104aabd8dca0369f704ad6cc7fd116ba505d7847ac6cf130d5bbd", height: 1584286, transactions: 67, total_sent: 6345.51, total_fee: 0.057, block_size: 48823},
-      %Block{hash: "d51145cc22c104aabd8dca0369f704ad6cc7fd116ba505d7847ac6cf130d5bbe", height: 1584285, transactions: 1, total_sent: 0, total_fee: 0, block_size: 246},
-      %Block{hash: "d51145cc22c104aabd8dca0369f704ad6cc7fd116ba505d7847ac6cf130d5bbf", height: 1584284, transactions: 116, total_sent: 3674.509, total_fee: 0.031, block_size: 40192},
-    ]
+    task = Task.async(fn -> getblockcount() end)
+    blockcount = elem(Task.await(task), 1)
+
+    refs =
+      Enum.map(
+        [
+          blockcount,
+          blockcount - 1,
+          blockcount - 2,
+          blockcount - 3,
+          blockcount - 4
+        ],
+        fn n -> getblockhash(n) end
+      )
+
+    Enum.map(refs, fn ref -> getblock(elem(ref, 1)) end)
+  end
+
+  def getinfo, do: bitcoin_rpc("getinfo")
+  def getblockcount, do: bitcoin_rpc("getblockcount")
+
+  @spec getblockhash(any()) ::
+          false
+          | nil
+          | true
+          | binary()
+          | [any()]
+          | number()
+          | {:error, any()}
+          | {:ok, any()}
+          | map()
+  def getblockhash(index), do: bitcoin_rpc("getblockhash", [index])
+
+  def getblock(hash) do
+    result = bitcoin_rpc("getblock", [hash])
+    elem(result, 1)
+  end
+
+  def getrawtransaction(txid) do
+    result = bitcoin_rpc("getrawtransaction", [txid])
+    elem(result, 1)
+  end
+
+  def decoderawtransaction(hexstring) do
+    result = bitcoin_rpc("decoderawtransaction", [hexstring])
+    elem(result, 1)
+  end
+
+  def bitcoin_rpc(method, params \\ []) do
+    with url <- Application.get_env(:bitcoin_url, :url),
+         command <- %{jsonrpc: "1.0", method: method, params: params},
+         {:ok, body} <- Poison.encode(command),
+         {:ok, response} <- HTTPoison.post(url, body),
+         {:ok, metadata} <- Poison.decode(response.body),
+         %{"error" => nil, "result" => result} <- metadata do
+      {:ok, result}
+    else
+      %{"error" => reason} -> {:error, reason}
+      error -> error
+    end
   end
 
   def get_block(hash) do
-    Enum.find(list_blocks(), fn map -> map.hash == hash end)
+    getblock(hash)
   end
 
-  # def get_user_by(params) do
-  #   Enum.find(list_users(), fn map ->
-  #     Enum.all?(params, fn {key, val} -> Map.get(map, key) == val end)
-  #   end)
+  def get_block_transactions(txs) do
+    rawresults = Enum.map(txs, fn txid -> getrawtransaction(txid) end)
+    Enum.map(rawresults, fn hexstring -> decoderawtransaction(hexstring) end)
   end
+end

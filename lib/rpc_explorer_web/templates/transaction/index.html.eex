@@ -1,8 +1,1 @@
-<h1>Listing Transactions</h1>
-<table>
-<%= for transaction <- @transactions do %>
-<tr>
-<td><td><%= link transaction.hash, to: Routes.transaction_path(@conn, :show, transaction.hash) %></td></td><td><%= transaction.amount%></td><td><%= transaction.size%></td>
-</tr>
-<% end %> 
-</table>
+<%= render "transactions.html", transactions: @transactions, conn: @conn %>

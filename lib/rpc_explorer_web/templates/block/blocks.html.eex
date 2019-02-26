@@ -1,0 +1,12 @@
+<h1>Listing Blocks</h1>
+<table>
+<tr><th>Height</th><th>Age</th><th>Transactions</th><th>Block Size</th></tr>
+<%= for block <- @blocks do %>
+<tr>
+    <td><%= link Map.get(block, "height"), to: Routes.block_path(@conn, :show, Map.get(block, "hash")) %></td>
+    <td><%= format_block_age(Map.get(block, "time"))%></td>
+    <td><%= Enum.count(Map.get(block, "tx"))%></td>
+    <td><%= Map.get(block, "strippedsize")%></td>
+</tr>
+<% end %> 
+</table>
