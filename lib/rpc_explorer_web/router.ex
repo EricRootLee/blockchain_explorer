@@ -16,11 +16,12 @@ defmodule RpcExplorerWeb.Router do
   scope "/", RpcExplorerWeb do
     pipe_through :browser
 
-    get "/block", BlockController, :index
+    #get "/block", BlockController, :index
     get "/block/:hash", BlockController, :show
     get "/transaction", TransactionController, :index
     get "/transaction/:hash", TransactionController, :show
-    get "/", PageController, :index
+    #get "/", PageController, :index
+    get "/", BlockController, :index
   end
 
   # Other scopes may use custom stacks.
