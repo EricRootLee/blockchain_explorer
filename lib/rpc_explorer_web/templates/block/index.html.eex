@@ -1,2 +1,1 @@
 <%= render "blocks.html", blocks: @blocks, conn: @conn %>
-<%#<%= render RpcExplorerWeb.TransactionView, "transactions.html", transactions: @transactions, conn: @conn %>
