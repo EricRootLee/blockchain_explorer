@@ -24,4 +24,17 @@
     <tr><td>Version:</td><td><%= Map.get(@block, "version") %></td></tr>
 </table>
 </div>
-<%= render "transaction_details.html", transactions: @transactions, conn: @conn %>
+<%= for transaction <- @transactions do %>
+<table>
+    <tr>
+        <td style="text-align:center">
+            <%= link Map.get(transaction, "txid"), to: Routes.transaction_path(@conn, :show, Map.get(transaction, "txid")) %>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <%= render "transaction_details.html", transaction: transaction, conn: @conn %>
+        </td>
+    </tr>
+</table>
+<% end %>

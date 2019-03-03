@@ -2,6 +2,9 @@
 <div class="section">
  <table>
     <tr><th>Total transacted</th><th>Size</th><th>Version</th></tr>
-    <tr><td><%= @transaction.amount %></td><td><%= @transaction.size %></td><td><%= @transaction.version %></td></tr>
+    <tr><td><%= Map.get(@transaction, "size") %></td><td><%=  %></td><td><%=  %></td></tr>
 </table>
+</div>
+<div class="section">
+<%= render RpcExplorerWeb.BlockView, "transaction_details.html", transaction: @transaction, conn: @conn %>
 </div>

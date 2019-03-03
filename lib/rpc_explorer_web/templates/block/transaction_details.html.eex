@@ -1,22 +1,20 @@
-<%= for transaction <- @transactions do %>
-<%# <%= if Map.get(transaction, "vin") |>  Enum.at(0) |> Map.get("coinbase") == nil do %>
-<h1>Inputs</h1>
-<table>
-<%= for txin <- Map.get(transaction, "vin") do %>
+<table border="1">
 <tr>
-<td>txid:</td><td><%= Map.get(txin, "txid") %></td>
+    <td>
+        <%= if Map.get(@transaction, "vin") |>  Enum.at(0) |> Map.get("coinbase") != nil do %>
+        <b>COINBASE</b>    
+        <% end %>
+    </td>
+    <td>==></td>
+    <td>
+        <%= for txout <- Map.get(@transaction, "vout") do %>
+        <div>
+            <%= Map.get(Map.get(txout, "scriptPubKey"), "addresses") %>
+            <%#NEED to be FIXED %>
+            <%= checkDataTransaction(Map.get(txout, "type")) %>
+            <%= Map.get(txout, "value") %> LTC
+        </div>
+        <% end %>
+    </td>
 </tr>
-<% end %>
 </table>
-
-<h1>Outputs</h1>
-<table>
-<%= for txout <- Map.get(transaction, "vout") do %>
-<tr>
-<td>Address:</td><td><%= Map.get(Map.get(txout, "scriptPubKey"), "addresses") %></td>
-<td>value:</td><td><%= Map.get(txout, "value") %></td>
-</tr>
-<% end %>
-</table>
-<%# <% end %> 
-<% end %>

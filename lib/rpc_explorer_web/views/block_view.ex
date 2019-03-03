@@ -11,4 +11,10 @@ defmodule RpcExplorerWeb.BlockView do
       true -> to_string(trunc(seconds/86400)) <> " days"
     end
   end
+
+  def checkDataTransaction(type) do
+    if type == "nulldata" do
+      "NULL DATA TRANSACTION"
+    end
+  end
 end

@@ -18,8 +18,8 @@ defmodule RpcExplorerWeb.Router do
 
     #get "/block", BlockController, :index
     get "/block/:hash", BlockController, :show
-    get "/transaction", TransactionController, :index
-    get "/transaction/:hash", TransactionController, :show
+    #get "/tx", TransactionController, :index
+    get "/tx/:txid", TransactionController, :show
     #get "/", PageController, :index
     get "/", BlockController, :index
   end
