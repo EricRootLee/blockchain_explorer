@@ -9,13 +9,17 @@ defmodule RpcExplorer.Transactions do
   end
 
   def getrawtransaction(txid) do
-    result = bitcoin_rpc("getrawtransaction", [txid])
-    elem(result, 1)
+    case bitcoin_rpc("getrawtransaction", [txid]) do
+      {:ok, response} -> response
+      {:error, reason} -> Map.get(reason, "message")
+    end
   end
 
   def decoderawtransaction(hexstring) do
-    result = bitcoin_rpc("decoderawtransaction", [hexstring])
-    elem(result, 1)
+    case bitcoin_rpc("decoderawtransaction", [hexstring]) do
+      {:ok, response} -> response
+      {:error, reason} -> Map.get(reason, "message")
+    end
   end
 
   def bitcoin_rpc(method, params \\ []) do

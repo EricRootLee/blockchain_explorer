@@ -1,6 +1,7 @@
 defmodule RpcExplorerWeb.BlockController do
   use RpcExplorerWeb, :controller
   alias RpcExplorer.Blocks
+  require Logger
 
   @spec index(Plug.Conn.t(), any()) :: Plug.Conn.t()
   def index(conn, _params) do

@@ -2,6 +2,7 @@ defmodule RpcExplorer.Blocks do
   @moduledoc """
   The Blocks context.
   """
+  require Logger
 
   def list_blocks do
     task = Task.async(fn -> getblockcount() end)
@@ -38,18 +39,24 @@ defmodule RpcExplorer.Blocks do
   def getblockhash(index), do: bitcoin_rpc("getblockhash", [index])
 
   def getblock(hash) do
-    result = bitcoin_rpc("getblock", [hash])
-    elem(result, 1)
+    case bitcoin_rpc("getblock", [hash]) do
+      {:ok, response} -> response
+      {:error, reason} -> Map.get(reason, "message")
+    end
   end
 
   def getrawtransaction(txid) do
-    result = bitcoin_rpc("getrawtransaction", [txid])
-    elem(result, 1)
+    case bitcoin_rpc("getrawtransaction", [txid]) do
+      {:ok, response} -> response
+      {:error, reason} -> Map.get(reason, "message")
+    end
   end
 
   def decoderawtransaction(hexstring) do
-    result = bitcoin_rpc("decoderawtransaction", [hexstring])
-    elem(result, 1)
+    case bitcoin_rpc("decoderawtransaction", [hexstring]) do
+      {:ok, response} -> response
+      {:error, reason} -> Map.get(reason, "message")
+    end
   end
 
   def bitcoin_rpc(method, params \\ []) do
