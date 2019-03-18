@@ -8,7 +8,9 @@ defmodule RpcExplorerWeb.BlockView do
       seconds < 60 -> to_string(seconds) <> " seconds"
       seconds < 3600 -> to_string(trunc(seconds/60)) <> " minutes"
       seconds < 86400 -> to_string(trunc(seconds/3600)) <> " hours"
-      true -> to_string(trunc(seconds/86400)) <> " days"
+      seconds < 2592000 -> to_string(trunc(seconds/86400)) <> " days"
+      seconds < 31536000 -> to_string(trunc(seconds/2592000)) <> " months"
+      true -> to_string(trunc(seconds/31536000)) <> " years"
     end
   end
 
